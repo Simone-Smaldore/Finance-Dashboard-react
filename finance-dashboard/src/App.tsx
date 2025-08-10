@@ -1,34 +1,49 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { darkTheme, lightTheme } from './theme'
+import Sidebar from './components/Sidebar'
+import Header from './components/Header'
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+`
+
+const Layout = styled.div`
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  height: 100vh;
+`
+
+const MainContent = styled.main`
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+`
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [theme, setTheme] = useState<'dark' | 'light'>('light')
+
+  const toggleTheme = () => {
+    setTheme(theme == "dark" ? 'light' : 'dark')
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+      <GlobalStyle />
+      <Layout>
+        <Sidebar onToggleTheme={toggleTheme} currentTheme={theme} />
+        <MainContent>
+          <Header userName="Simone Smaldore" />
+        </MainContent>
+      </Layout>
+    </ThemeProvider>
   )
 }
 
