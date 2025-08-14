@@ -1,9 +1,9 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useState } from 'react'
-import './App.css'
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { darkTheme, lightTheme } from './theme'
-import Sidebar from './components/Sidebar'
-import Header from './components/Header'
+import Login from './components/login/Login'
+import Dashboard from './components/dashboard/Dashboard'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -15,34 +15,25 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = styled.div`
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  height: 100vh;
-`
-
-const MainContent = styled.main`
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-`
 
 function App() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('light')
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
-  const toggleTheme = () => {
-    setTheme(theme == "dark" ? 'light' : 'dark')
-  }
+  const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark')
 
   return (
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <Layout>
-        <Sidebar onToggleTheme={toggleTheme} currentTheme={theme} />
-        <MainContent>
-          <Header userName="Simone Smaldore" />
-        </MainContent>
-      </Layout>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login onLoginSuccess={() => window.location.href = '/dashboard'} />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard onToggleTheme={toggleTheme} theme={theme} />}
+          />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   )
 }
