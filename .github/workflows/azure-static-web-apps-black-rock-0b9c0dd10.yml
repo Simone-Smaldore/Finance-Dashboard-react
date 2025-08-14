@@ -44,7 +44,7 @@ jobs:
         working-directory: ./finance-dashboard
 
       - name: Copy Azure config
-        run: cp finance-dashboard/staticwebapp.config.json finance-dashboard/dist/
+        run: cp ./finance-dashboard/staticwebapp.config.json ./finance-dashboard/dist/
 
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
