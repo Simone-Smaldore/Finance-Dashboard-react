@@ -4,6 +4,8 @@ import Sidebar, { type Page } from "./Sidebar"
 import Header from "./Header"
 import MainPanel from "./MainPanel"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../services/authService"
 
 const Layout = styled.div`
   display: grid;
@@ -23,18 +25,34 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
     const [currentPage, setCurrentPage] = useState<Page>("Dashboard")
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate("/login", { replace: true });
+        } catch (err) {
+            console.error("Errore durante il logout", err);
+        }
+    };
 
 
     return <PrivateRoute>
-        <Layout>
-            <Sidebar onToggleTheme={onToggleTheme} currentTheme={theme} onChangePage={setCurrentPage}
-                currentPage={currentPage} />
-            <MainContent>
-                <Header userName="Simone Smaldore" />
-                <MainPanel currentPage={currentPage} />
-            </MainContent>
-        </Layout>
+        {(user) => (
+            <Layout>
+                <Sidebar
+                    onToggleTheme={onToggleTheme}
+                    currentTheme={theme}
+                    onChangePage={setCurrentPage}
+                    currentPage={currentPage}
+                />
+                <MainContent>
+                    <Header userName={user.nome_completo} onLogout={handleLogout} />
+                    <MainPanel currentPage={currentPage} />
+                </MainContent>
+            </Layout>
+        )}
     </PrivateRoute>
+
 }
 
 export default Home
