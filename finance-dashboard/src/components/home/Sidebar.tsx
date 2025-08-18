@@ -1,8 +1,7 @@
-import React from 'react'
 import styled from 'styled-components'
-import ThemeToggle from './ThemeToggle'
+import ThemeToggle from '../ThemeToggle'
 import { FaMoneyBillWave } from 'react-icons/fa6'
-import { FaCog, FaExchangeAlt, FaTachometerAlt, FaWallet } from 'react-icons/fa'
+import { FaExchangeAlt, FaTachometerAlt } from 'react-icons/fa'
 
 
 const Container = styled.nav`
@@ -28,19 +27,21 @@ const Menu = styled.ul`
   padding: 0;
   margin: 0;
 `
-
-const MenuItem = styled.li`
+const MenuItem = styled.li<{ selected?: boolean }>`
   margin-bottom: 1.25rem;
   cursor: pointer;
-  padding-left: 2rem;
+  padding: 8px 16px;
+  border-radius: ${({ selected }) => (selected ? "20px" : "0")};
+  background-color: ${({ selected, theme }) => (selected ? theme.cardBglight : theme.cardBg)};
   color: ${({ theme }) => theme.text};
   font-weight: 500;
-  font-size:1.2rem;
+  font-size: 1.2rem;
 
   &:hover {
-    color: ${({ theme }) => theme.accent};
+    color: ${({ theme }) => theme.primary};
   }
 `
+
 
 const LogoText = styled.p`
     margin-left: 16px;
@@ -53,16 +54,24 @@ const Footer = styled.div`
 interface SidebarProps {
     onToggleTheme: () => void
     currentTheme: 'dark' | 'light'
+    onChangePage: (page: Page) => void
+    currentPage: Page
 }
+
 
 const menuItems = [
     { label: 'Dashboard', icon: <FaTachometerAlt /> },
-    { label: 'Wallet', icon: <FaWallet /> },
     { label: 'Transactions', icon: <FaExchangeAlt /> },
-    { label: 'Settings', icon: <FaCog /> },
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme }) => {
+export type Page = typeof menuItems[number]["label"]
+
+
+const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChangePage, currentPage }) => {
+
+    const onSelectedItem = (item: string) => {
+        onChangePage(item)
+    }
     return (
         <Container>
             <div>
@@ -72,9 +81,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme }) => {
                 </Logo>
                 <Menu>
                     {menuItems.map(({ label, icon }) => (
-                        <MenuItem key={label}>
+                        <MenuItem
+                            key={label}
+                            selected={currentPage === label}
+                            onClick={() => onSelectedItem(label)}
+                        >
                             {icon}
-                            <span style={{ marginLeft: '16px' }}>{label}</span>
+                            <span style={{ marginLeft: "16px", padding: "8px" }}>{label}</span>
                         </MenuItem>
                     ))}
                 </Menu>

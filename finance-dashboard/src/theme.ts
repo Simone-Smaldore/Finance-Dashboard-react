@@ -9,6 +9,7 @@ export const darkTheme: DefaultTheme = {
     cardBg: '#1e1e2f',
     shadow: 'rgba(0,0,0,0.7)',
     toggleColor: '#121212',
+    cardBglight: '#29293bff',
 }
 
 export const lightTheme: DefaultTheme = {
@@ -20,4 +21,5 @@ export const lightTheme: DefaultTheme = {
     cardBg: '#f5f5f5',
     shadow: 'rgba(0,0,0,0.1)',
     toggleColor: '#dedede',
+    cardBglight: '#dbd0d0ff',
 }

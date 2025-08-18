@@ -1,7 +1,9 @@
 import { styled } from "styled-components"
 import PrivateRoute from "../../PrivateRoute"
-import Sidebar from "../Sidebar"
-import Header from "../Header"
+import Sidebar, { type Page } from "./Sidebar"
+import Header from "./Header"
+import MainPanel from "./MainPanel"
+import { useState } from "react"
 
 const Layout = styled.div`
   display: grid;
@@ -14,20 +16,25 @@ const MainContent = styled.main`
   display: flex;
   flex-direction: column;
 `
-interface DashboardProps {
+interface HomeProps {
     onToggleTheme: () => void,
     theme: "dark" | "light"
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ onToggleTheme, theme }) => {
+const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
+    const [currentPage, setCurrentPage] = useState<Page>("Dashboard")
+
+
     return <PrivateRoute>
         <Layout>
-            <Sidebar onToggleTheme={onToggleTheme} currentTheme={theme} />
+            <Sidebar onToggleTheme={onToggleTheme} currentTheme={theme} onChangePage={setCurrentPage}
+                currentPage={currentPage} />
             <MainContent>
                 <Header userName="Simone Smaldore" />
+                <MainPanel currentPage={currentPage} />
             </MainContent>
         </Layout>
     </PrivateRoute>
 }
 
-export default Dashboard
+export default Home

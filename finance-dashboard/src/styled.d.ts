@@ -5,6 +5,7 @@ declare module 'styled-components' {
         background: string;
         primary: string;
         secondary: string;
+        cardBglight: string;
         text: string;
         accent: string;
         cardBg: string;

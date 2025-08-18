@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { darkTheme, lightTheme } from './theme'
 import Login from './components/login/Login'
-import Dashboard from './components/dashboard/Dashboard'
+import Home from './components/home/Home'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -29,7 +29,7 @@ function App() {
           <Route path="/login" element={<Login onLoginSuccess={() => window.location.href = '/dashboard'} />} />
           <Route
             path="/dashboard"
-            element={<Dashboard onToggleTheme={toggleTheme} theme={theme} />}
+            element={<Home onToggleTheme={toggleTheme} theme={theme} />}
           />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

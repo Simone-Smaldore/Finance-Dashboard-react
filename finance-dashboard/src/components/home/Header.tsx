@@ -35,28 +35,24 @@ const UserName = styled.span`
 `
 
 interface HeaderProps {
-    userName: string
+  userName: string
 }
 
 const Header: React.FC<HeaderProps> = ({ userName }) => {
-    const initials = userName
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
+  const initials = userName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
 
-    return (
-        <Container>
-            <UserInfo>
-                <Avatar>{initials}</Avatar>
-                <UserName>{userName}</UserName>
-            </UserInfo>
-        </Container>
-        // <Container>
-        //     <Avatar>{initials}</Avatar>
-        //     <UserName>{userName}</UserName>
-        // </Container>
-    )
+  return (
+    <Container>
+      <UserInfo>
+        <Avatar>{initials}</Avatar>
+        <UserName>{userName}</UserName>
+      </UserInfo>
+    </Container>
+  )
 }
 
 export default Header
