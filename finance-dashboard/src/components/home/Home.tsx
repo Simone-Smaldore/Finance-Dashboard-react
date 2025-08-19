@@ -7,10 +7,15 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/authService"
 
-const Layout = styled.div`
+const Layout = styled.div<{ menuOpen: boolean }>`
   display: grid;
   grid-template-columns: 250px 1fr;
   height: 100vh;
+
+  @media (max-width: 800px) {
+    grid-template-columns: ${({ menuOpen }) => (menuOpen ? "250px 1fr" : "1fr")};
+    transition: grid-template-columns 0.3s ease;
+  }
 `
 
 const MainContent = styled.main`
@@ -25,7 +30,9 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
     const [currentPage, setCurrentPage] = useState<Page>("Dashboard")
+    const [menuOpen, setMenuOpen] = useState(false)
     const navigate = useNavigate();
+
     const handleLogout = async () => {
         try {
             await logout();
@@ -35,24 +42,34 @@ const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
         }
     };
 
+    const toggleMenu = () => setMenuOpen(prev => !prev);
 
     return <PrivateRoute>
         {(user) => (
-            <Layout>
+            <Layout menuOpen={menuOpen}>
                 <Sidebar
                     onToggleTheme={onToggleTheme}
                     currentTheme={theme}
-                    onChangePage={setCurrentPage}
+                    onChangePage={(page) => {
+                        setCurrentPage(page)
+                        if (menuOpen) setMenuOpen(false) // chiudi il menu su mobile
+                    }}
                     currentPage={currentPage}
+                    menuOpen={menuOpen}
                 />
                 <MainContent>
-                    <Header userName={user.nome_completo} onLogout={handleLogout} />
+                    <Header
+                        userName={user.nome_completo}
+                        onLogout={handleLogout}
+                        onBurgerClick={toggleMenu}   // nuovo prop
+                        currentPage={currentPage}    // mostra pagina su mobile
+                        menuOpen={menuOpen}
+                    />
                     <MainPanel currentPage={currentPage} />
                 </MainContent>
             </Layout>
         )}
     </PrivateRoute>
-
 }
 
 export default Home

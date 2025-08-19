@@ -4,13 +4,17 @@ import { FaMoneyBillWave } from 'react-icons/fa6'
 import { FaExchangeAlt, FaTachometerAlt } from 'react-icons/fa'
 
 
-const Container = styled.nav`
+const Container = styled.nav<{ menuOpen: boolean }>`
   background: ${({ theme }) => theme.cardBg};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
   box-shadow: 2px 0 5px ${({ theme }) => theme.shadow};
+
+  @media (max-width: 800px) {
+    display: ${({ menuOpen }) => (menuOpen ? "block" : "none")};
+  }
 `
 const Logo = styled.div`
   margin-left: 1rem;
@@ -56,6 +60,7 @@ interface SidebarProps {
     currentTheme: 'dark' | 'light'
     onChangePage: (page: Page) => void
     currentPage: Page
+    menuOpen: boolean
 }
 
 
@@ -67,13 +72,13 @@ const menuItems = [
 export type Page = typeof menuItems[number]["label"]
 
 
-const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChangePage, currentPage }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChangePage, currentPage, menuOpen }) => {
 
     const onSelectedItem = (item: string) => {
         onChangePage(item)
     }
     return (
-        <Container>
+        <Container menuOpen={menuOpen}>
             <div>
                 <Logo>
                     <FaMoneyBillWave />
