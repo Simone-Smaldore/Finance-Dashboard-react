@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import ThemeToggle from '../ThemeToggle'
 import { FaMoneyBillWave } from 'react-icons/fa6'
 import { FaExchangeAlt, FaTachometerAlt } from 'react-icons/fa'
+import { useEffect, useRef } from 'react';
 
 
 const Container = styled.nav<{ menuOpen: boolean }>`
@@ -13,9 +14,20 @@ const Container = styled.nav<{ menuOpen: boolean }>`
   box-shadow: 2px 0 5px ${({ theme }) => theme.shadow};
 
   @media (max-width: 800px) {
-    display: ${({ menuOpen }) => (menuOpen ? "block" : "none")};
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 95vh;
+    width: 250px;
+    transform: ${({ menuOpen }) => (menuOpen ? 'translateX(0)' : 'translateX(-100%)')};
+    transition: transform 0.3s ease;
+    z-index: 200;
   }
-`
+`;
+
+
+
+
 const Logo = styled.div`
   margin-left: 1rem;
   display: flex;
@@ -61,6 +73,7 @@ interface SidebarProps {
     onChangePage: (page: Page) => void
     currentPage: Page
     menuOpen: boolean
+    setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
@@ -72,13 +85,32 @@ const menuItems = [
 export type Page = typeof menuItems[number]["label"]
 
 
-const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChangePage, currentPage, menuOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChangePage, currentPage, menuOpen, setMenuOpen }) => {
+    const ref = useRef<HTMLDivElement>(null);
 
     const onSelectedItem = (item: string) => {
-        onChangePage(item)
-    }
+        onChangePage(item);
+        if (menuOpen) setMenuOpen(false); // chiude menu su mobile
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (ref.current && !ref.current.contains(event.target as Node)) {
+                setMenuOpen(false);
+            }
+        };
+
+        if (menuOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [menuOpen, setMenuOpen]);
+
     return (
-        <Container menuOpen={menuOpen}>
+        <Container ref={ref} menuOpen={menuOpen}>
             <div>
                 <Logo>
                     <FaMoneyBillWave />
@@ -97,16 +129,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChange
                     ))}
                 </Menu>
             </div>
-
             <Footer>
-                <ThemeToggle
-                    onToggleTheme={onToggleTheme}
-                    currentTheme={currentTheme}
-                />
+                <ThemeToggle onToggleTheme={onToggleTheme} currentTheme={currentTheme} />
             </Footer>
         </Container>
-    )
-}
+    );
+};
 
 
 export default Sidebar

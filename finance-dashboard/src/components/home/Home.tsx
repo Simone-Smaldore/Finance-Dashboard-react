@@ -13,8 +13,7 @@ const Layout = styled.div<{ menuOpen: boolean }>`
   height: 100vh;
 
   @media (max-width: 800px) {
-    grid-template-columns: ${({ menuOpen }) => (menuOpen ? "250px 1fr" : "1fr")};
-    transition: grid-template-columns 0.3s ease;
+    grid-template-columns: "1fr"
   }
 `
 
@@ -22,6 +21,10 @@ const MainContent = styled.main`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 800px) {
+    width: 100vw; // forza a occupare tutta la larghezza
+  }
 `
 interface HomeProps {
     onToggleTheme: () => void,
@@ -56,6 +59,7 @@ const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
                     }}
                     currentPage={currentPage}
                     menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
                 />
                 <MainContent>
                     <Header

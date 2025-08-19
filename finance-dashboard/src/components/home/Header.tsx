@@ -9,6 +9,10 @@ const Container = styled.header`
   align-items: center;
   position: relative;
   padding: 0 16px;
+
+  @media (max-width: 800px) {
+    margin-right: 0px;
+  }
 `;
 
 const LeftSection = styled.div<{ menuOpen: boolean }>`
@@ -16,9 +20,6 @@ const LeftSection = styled.div<{ menuOpen: boolean }>`
   align-items: center;
   gap: 0.5rem;
 
-  @media (max-width: 800px) {
-    display: ${({ menuOpen }) => (menuOpen ? "none" : "flex")};
-  }
 `;
 
 const Burger = styled.span`
