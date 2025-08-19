@@ -4,6 +4,7 @@ export const darkTheme: DefaultTheme = {
     background: '#121212',
     text: '#eee',
     primary: '#7f5af0', // viola neon
+    primaryDark: '#5a36c7ff',
     secondary: '#0f62fe', // blu neon
     accent: '#ff79c6', // rosa neon
     cardBg: '#1e1e2f',
@@ -16,6 +17,7 @@ export const lightTheme: DefaultTheme = {
     background: '#fff',
     text: '#222',
     primary: '#7f5af0',
+    primaryDark: '#5a36c7ff',
     secondary: '#0f62fe',
     accent: '#ff79c6',
     cardBg: '#f5f5f5',
