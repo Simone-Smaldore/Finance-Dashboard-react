@@ -17,7 +17,7 @@ const Container = styled.nav<{ menuOpen: boolean }>`
     position: absolute;
     top: 0;
     left: 0;
-    height: 95vh;
+    height: 100vh;
     width: 250px;
     transform: ${({ menuOpen }) => (menuOpen ? 'translateX(0)' : 'translateX(-100%)')};
     transition: transform 0.3s ease;
@@ -44,6 +44,8 @@ const Menu = styled.ul`
   margin: 0;
 `
 const MenuItem = styled.li<{ selected?: boolean }>`
+  display: flex;
+  align-items:center;
   margin-bottom: 1.25rem;
   cursor: pointer;
   padding: 8px 16px;
@@ -124,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggleTheme, currentTheme, onChange
                             onClick={() => onSelectedItem(label)}
                         >
                             {icon}
-                            <span style={{ marginLeft: "16px", padding: "8px" }}>{label}</span>
+                            <span style={{ marginLeft: "8px", padding: "8px" }}>{label}</span>
                         </MenuItem>
                     ))}
                 </Menu>
