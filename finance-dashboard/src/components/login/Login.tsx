@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import bgImage from "../../assets/finance.jpeg";
 
 interface LoginProps {
-    onLoginSuccess: () => void;
+  onLoginSuccess: () => void;
 }
 
 const Background = styled.div`
@@ -78,7 +78,7 @@ const InputGroup = styled.div`
   }
 
   input {
-    width: 95%;
+    width: 100%;
     padding: 12px;
     border: none;
     border-radius: 8px;
@@ -167,8 +167,8 @@ const Button = styled.button`
 const IconButton = styled.button`
   width:0;
   position: absolute;
-  right: 20px;
-  bottom: 4px;
+  right: 30px;
+  bottom: 12px;
   background: none;
   border: none;
   color: #fff;
@@ -177,104 +177,104 @@ const IconButton = styled.button`
 `;
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [remember, setRemember] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [remember, setRemember] = useState(true);
 
-    useEffect(() => {
-        const stored = localStorage.getItem("remembered_username");
-        if (stored) setUsername(stored);
-    }, []);
+  useEffect(() => {
+    const stored = localStorage.getItem("remembered_username");
+    if (stored) setUsername(stored);
+  }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
-        try {
-            await login(username.trim().toLowerCase(), password);
-            if (remember) {
-                localStorage.setItem("remembered_username", username.trim());
-            } else {
-                localStorage.removeItem("remembered_username");
-            }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      await login(username.trim().toLowerCase(), password);
+      if (remember) {
+        localStorage.setItem("remembered_username", username.trim());
+      } else {
+        localStorage.removeItem("remembered_username");
+      }
 
-            onLoginSuccess();
-        } catch (err: unknown) {
-            if (err instanceof AxiosError) {
-                setError(err.response?.data?.error || "Credenziali non valide");
-            } else {
-                setError("Errore di comunicazione con il server");
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
+      onLoginSuccess();
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        setError(err.response?.data?.error || "Credenziali non valide");
+      } else {
+        setError("Errore di comunicazione con il server");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <Background>
-            <Card>
-                <Title>Login</Title>
+  return (
+    <Background>
+      <Card>
+        <Title>Login</Title>
 
-                {error && <ErrorMsg>{error}</ErrorMsg>}
+        {error && <ErrorMsg>{error}</ErrorMsg>}
 
-                <Form onSubmit={handleSubmit}>
-                    <InputGroup>
-                        <label htmlFor="username">Username</label>
-                        <input
-                            id="username"
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                            autoComplete="username"
-                        />
-                    </InputGroup>
+        <Form onSubmit={handleSubmit}>
+          <InputGroup>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoComplete="username"
+            />
+          </InputGroup>
 
-                    <InputGroup>
-                        <label htmlFor="password">Password</label>
-                        <PasswordWrapper>
-                            <input
-                                id="password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                autoComplete="current-password"
-                            />
-                            <IconButton
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                            </IconButton>
-                        </PasswordWrapper>
-                    </InputGroup>
+          <InputGroup>
+            <label htmlFor="password">Password</label>
+            <PasswordWrapper>
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+              />
+              <IconButton
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </IconButton>
+            </PasswordWrapper>
+          </InputGroup>
 
-                    <Footer>
-                        <Remember>
-                            <input
-                                type="checkbox"
-                                checked={remember}
-                                onChange={(e) => setRemember(e.target.checked)}
-                            />
-                            Ricordami
-                        </Remember>
-                    </Footer>
+          <Footer>
+            <Remember>
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+              />
+              Ricordami
+            </Remember>
+          </Footer>
 
-                    <Button type="submit" disabled={loading}>
-                        {loading ? "Accesso in corso..." : "Accedi"}
-                    </Button>
-                </Form>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Accesso in corso..." : "Accedi"}
+          </Button>
+        </Form>
 
 
-            </Card>
-        </Background>
-    );
+      </Card>
+    </Background>
+  );
 };
 
 export default Login;
