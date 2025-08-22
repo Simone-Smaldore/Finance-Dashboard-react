@@ -1,4 +1,3 @@
-// src/components/FullscreenSpinner.tsx
 import React from "react";
 
 export default function FullscreenSpinner() {

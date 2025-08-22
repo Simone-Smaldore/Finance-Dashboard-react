@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Transazione } from "../model/Transazione";
-import { getTransazioni } from "../services/transactionsService";
+import { deleteTransazione, getTransazioni } from "../services/transactionsService";
+import { queryClient } from "../main";
 
 export const useTransazioni = () => {
     return useQuery<Transazione[]>({
@@ -12,22 +13,15 @@ export const useTransazioni = () => {
 
 
 
-// export const useDeleteTransazione = () => {
-//     return useMutation<void, Error, number>({
-//         mutationFn: (id: number) => deleteTransazioneService(id),
-//         onSuccess: (_, id) => {
-//             queryClient.setQueryData<Transazione[]>(["transazioni"], (old) =>
-//                 old ? old.filter((t) => t.id !== id) : []
-//             );
-//         },
-//     });
-// };
+export const useDeleteTransazione = () => {
+    return useMutation<void, Error, number>({
+        mutationFn: (id: number) => deleteTransazione(id),
+        onSuccess: (_, id) => {
+            queryClient.setQueryData<Transazione[]>(["transazioni"], (old) =>
+                old ? old.filter((t) => t.id !== id) : []
+            );
+        },
+    });
+};
 
 
-
-// Nel componente:
-// import { useDeleteTransazione } from "../hooks/useDeleteTransazione";
-
-// const { mutate: deleteTransazione } = useDeleteTransazione();
-
-// <button onClick={() => deleteTransazione(t.id)}>Cancella</button>

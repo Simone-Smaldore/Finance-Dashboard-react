@@ -1,14 +1,13 @@
-import axios from "axios";
 import type { User } from "../model/User";
+import api from "./api";
 
 
 export async function login(username: string, password: string) {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/login`,
+    const res = await api.post(
+        `/login`,
         { username, password },
         {
             headers: { "Content-Type": "application/json" },
-            withCredentials: true,
         }
     );
     return res;
@@ -16,17 +15,11 @@ export async function login(username: string, password: string) {
 
 
 export async function getCurrentUser(): Promise<User> {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/me`, {
-        withCredentials: true,
-    });
+    const res = await api.get(`/me`,);
     return res.data;
 }
 
 export async function logout() {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/logout`,
-        {},
-        { withCredentials: true }
-    );
+    const res = await api.post(`/logout`);
     return res;
 }
