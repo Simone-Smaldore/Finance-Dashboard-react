@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import ThemeToggle from '../ThemeToggle'
-import { FaMoneyBillWave } from 'react-icons/fa6'
+import { FaCreditCard, FaMoneyBillWave } from 'react-icons/fa6'
 import { FaExchangeAlt, FaTachometerAlt } from 'react-icons/fa'
 import { useEffect, useRef } from 'react';
 
@@ -82,6 +82,7 @@ interface SidebarProps {
 const menuItems = [
     { label: 'Dashboard', icon: <FaTachometerAlt /> },
     { label: 'Transactions', icon: <FaExchangeAlt /> },
+    { label: 'Accounts', icon: <FaCreditCard /> },
 ];
 
 export type Page = typeof menuItems[number]["label"]

@@ -1,3 +1,4 @@
+import Accounts from "./pages/Accounts"
 import Dashboard from "./pages/Dashboard"
 import Transactions from "./pages/Transactions"
 import type { Page } from "./Sidebar"
@@ -8,7 +9,18 @@ interface MainPanelProps {
 const MainPanel: React.FC<MainPanelProps> = ({ currentPage }) => {
     return (
         <>
-            {currentPage === 'Dashboard' ? <Dashboard /> : <Transactions />}
+            {(() => {
+                switch (currentPage) {
+                    case 'Dashboard':
+                        return <Dashboard />;
+                    case 'Transactions':
+                        return <Transactions />;
+                    case 'Accounts':
+                        return <Accounts />;
+                    default:
+                        return <Dashboard />; // fallback
+                }
+            })()}
         </>
     )
 }
