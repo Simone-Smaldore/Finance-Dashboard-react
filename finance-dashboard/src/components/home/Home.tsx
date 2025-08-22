@@ -6,6 +6,7 @@ import MainPanel from "./MainPanel"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../services/authService"
+import { useAuth } from "../../auth/useAuth"
 
 const Layout = styled.div<{ menuOpen: boolean }>`
   display: grid;
@@ -36,6 +37,8 @@ const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
     const [menuOpen, setMenuOpen] = useState(false)
     const navigate = useNavigate();
 
+    const { user } = useAuth()
+
     const handleLogout = async () => {
         try {
             await logout();
@@ -48,31 +51,29 @@ const Home: React.FC<HomeProps> = ({ onToggleTheme, theme }) => {
     const toggleMenu = () => setMenuOpen(prev => !prev);
 
     return <PrivateRoute>
-        {(user) => (
-            <Layout menuOpen={menuOpen}>
-                <Sidebar
-                    onToggleTheme={onToggleTheme}
-                    currentTheme={theme}
-                    onChangePage={(page) => {
-                        setCurrentPage(page)
-                        if (menuOpen) setMenuOpen(false) // chiudi il menu su mobile
-                    }}
-                    currentPage={currentPage}
+        <Layout menuOpen={menuOpen}>
+            <Sidebar
+                onToggleTheme={onToggleTheme}
+                currentTheme={theme}
+                onChangePage={(page) => {
+                    setCurrentPage(page)
+                    if (menuOpen) setMenuOpen(false) // chiudi il menu su mobile
+                }}
+                currentPage={currentPage}
+                menuOpen={menuOpen}
+                setMenuOpen={setMenuOpen}
+            />
+            <MainContent>
+                <Header
+                    userName={user?.nome_completo ?? ""}
+                    onLogout={handleLogout}
+                    onBurgerClick={toggleMenu}   // nuovo prop
+                    currentPage={currentPage}    // mostra pagina su mobile
                     menuOpen={menuOpen}
-                    setMenuOpen={setMenuOpen}
                 />
-                <MainContent>
-                    <Header
-                        userName={user.nome_completo}
-                        onLogout={handleLogout}
-                        onBurgerClick={toggleMenu}   // nuovo prop
-                        currentPage={currentPage}    // mostra pagina su mobile
-                        menuOpen={menuOpen}
-                    />
-                    <MainPanel currentPage={currentPage} />
-                </MainContent>
-            </Layout>
-        )}
+                <MainPanel currentPage={currentPage} />
+            </MainContent>
+        </Layout>
     </PrivateRoute>
 }
 

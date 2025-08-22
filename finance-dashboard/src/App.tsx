@@ -4,6 +4,8 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { darkTheme, lightTheme } from './theme'
 import Login from './components/login/Login'
 import Home from './components/home/Home'
+import { AuthProvider } from './auth/AuthProvider'
+import { AppSetup } from './AppSetup'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -28,19 +30,22 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
-      <GlobalStyle />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login onLoginSuccess={() => window.location.href = '/dashboard'} />} />
-          <Route
-            path="/dashboard"
-            element={<Home onToggleTheme={toggleTheme} theme={theme} />}
-          />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <AuthProvider>
+      <AppSetup />
+      <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login onLoginSuccess={() => window.location.href = '/dashboard'} />} />
+            <Route
+              path="/dashboard"
+              element={<Home onToggleTheme={toggleTheme} theme={theme} />}
+            />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
 
