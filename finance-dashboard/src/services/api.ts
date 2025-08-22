@@ -19,6 +19,8 @@ api.interceptors.request.use((config) => {
         .find((row) => row.startsWith("csrf_access_token="))
         ?.split("=")[1];
 
+    console.log("CSRF TOKEN " + csrfToken)
+
     if (csrfToken && config.method !== "get") {
         config.headers!["X-CSRF-TOKEN"] = csrfToken;
     }
