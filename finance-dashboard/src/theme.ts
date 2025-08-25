@@ -1,6 +1,7 @@
 import type { DefaultTheme } from 'styled-components';
 
 export const darkTheme: DefaultTheme = {
+    mode: 'dark',
     background: '#121212',
     text: '#eee',
     primary: '#7f5af0', // viola neon
@@ -14,6 +15,7 @@ export const darkTheme: DefaultTheme = {
 }
 
 export const lightTheme: DefaultTheme = {
+    mode: 'light',
     background: '#fff',
     text: '#222',
     primary: '#7f5af0',
