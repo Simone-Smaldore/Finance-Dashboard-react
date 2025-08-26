@@ -11,6 +11,8 @@ import FullscreenSpinner from "../../FullScreenSpinner";
 import FormModal from "../../modals/FormModal";
 import TransactionForm from "../../forms/TransactionForm";
 import type { Transazione } from "../../../model/Transazione";
+import type { AxiosError } from "axios";
+import type { ValidationErrorResponse } from "../../../model/Validators";
 
 export default function Transactions() {
     const { data: transazioni = [], isLoading, isError } = useTransazioni();
@@ -71,9 +73,16 @@ export default function Transactions() {
             updateMutation.mutate(
                 { id, updates },
                 {
-                    onError: (err) => {
-                        console.error("Errore aggiornamento:", err);
-                        alert("Errore durante l'aggiornamento");
+                    onError: (err: unknown) => {
+                        console.log(err)
+                        const axiosErr = err as AxiosError<ValidationErrorResponse>;
+
+                        if (axiosErr.response?.data?.errors) {
+                            const messaggi = axiosErr.response.data.errors.join("\n");
+                            alert("Errori di validazione:\n" + messaggi);
+                        } else {
+                            alert("Errore durante l'operazione");
+                        }
                     },
                     onSettled: () => {
                         setShowFormModal(false);
@@ -88,9 +97,16 @@ export default function Transactions() {
             createMutation.mutate(
                 { id_conto: 1, transazione: values },
                 {
-                    onError: (err) => {
-                        console.error("Errore creazione:", err);
-                        alert("Errore durante la creazione");
+                    onError: (err: unknown) => {
+                        console.log(err)
+                        const axiosErr = err as AxiosError<ValidationErrorResponse>;
+
+                        if (axiosErr.response?.data?.errors) {
+                            const messaggi = axiosErr.response.data.errors.join("\n");
+                            alert("Errori di validazione:\n" + messaggi);
+                        } else {
+                            alert("Errore durante l'operazione");
+                        }
                     },
                     onSettled: () => setShowFormModal(false),
                 }
@@ -170,7 +186,7 @@ export default function Transactions() {
                     editingTransazione ?? {
                         id: undefined,
                         descrizione: "",
-                        importo: 0,
+                        importo: 0.01,
                         data_riferimento: new Date().toISOString(),
                         tipologia_spesa: "",
                     }

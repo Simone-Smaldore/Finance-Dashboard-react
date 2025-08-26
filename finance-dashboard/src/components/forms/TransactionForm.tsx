@@ -50,6 +50,15 @@ export default function TransactionForm({ values, setValues, setIsValid }: Trans
         if (!newValues.data_riferimento || newValues.data_riferimento.trim() === "") {
             newErrors.data_riferimento = "La data è obbligatoria";
         }
+        if (!newValues.importo || newValues.importo < 0.01) {
+            newErrors.importo = "L'importo minimo è un centesimo";
+        } else {
+            // Controllo massimo 2 decimali
+            const decimali = newValues.importo.toString().split(".")[1];
+            if (decimali && decimali.length > 2) {
+                newErrors.importo = "L'importo può avere al massimo 2 decimali";
+            }
+        }
 
         setErrors(newErrors);
         setIsValid(Object.keys(newErrors).length === 0);
@@ -90,7 +99,12 @@ export default function TransactionForm({ values, setValues, setIsValid }: Trans
                     value={values.importo}
                     onChange={(e) => handleChange("importo", parseFloat(e.target.value))}
                     onBlur={() => handleTouched("importo")}
+                    min={0.01}
+                    step={0.01}
                 />
+                {touched.importo && errors.importo && (
+                    <p className="text-red-500 text-xs">{errors.importo}</p>
+                )}
             </div>
             <div>
                 <label className="block text-sm mb-1">Data</label>
