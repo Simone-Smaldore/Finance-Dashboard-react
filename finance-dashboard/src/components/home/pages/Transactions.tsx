@@ -134,7 +134,8 @@ export default function Transactions() {
                             <th className="border px-3 py-2">Descrizione</th>
                             <th className="border px-3 py-2">Importo</th>
                             <th className="border px-3 py-2">Data</th>
-                            <th className="border px-3 py-2">Tipologia</th>
+                            <th className="border px-3 py-2">Categporia</th>
+                            <th className="border px-3 py-2">Tipo</th>
                             <th className="border px-3 py-2 w-28">Azioni</th>
                         </tr>
                     </thead>
@@ -149,6 +150,12 @@ export default function Transactions() {
                                         : "-"}
                                 </td>
                                 <td className="border px-3 py-2">{t.tipologia_spesa || "-"}</td>
+                                <td className="border px-3 py-2 "><p
+                                    className={`mt-2 font-semibold ${t.tipo_transazione === "Uscita" ? "text-red-500" : "text-green-500"
+                                        }`}
+                                >
+                                    {t.tipo_transazione || "-"}
+                                </p></td>
                                 <td className="border px-3 py-2">
                                     <div className="flex gap-2">
                                         <button className="px-3 py-3 bg-neon-blue text-white rounded hover:bg-neon-blue-hover hover:cursor-pointer" onClick={() => handleEdit(t)}>
@@ -177,14 +184,25 @@ export default function Transactions() {
                             </h3>
 
                             {/* Data */}
-                            <p className="text-xs text-gray-500 mt-1">
-                                {t.data_riferimento
-                                    ? new Date(t.data_riferimento).toLocaleDateString()
-                                    : "-"}
-                            </p>
+                            <div className="flex align-middle items-center justify-between">
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {t.data_riferimento
+                                        ? new Date(t.data_riferimento).toLocaleDateString()
+                                        : "-"}
+                                </p>
+                                {/* Descrizione */}
+                                <p
+                                    className={`mt-2 font-semibold ${t.tipo_transazione === "Uscita" ? "text-red-500" : "text-green-500"
+                                        }`}
+                                >
+                                    {t.tipo_transazione || "-"}
+                                </p>
+                            </div>
 
                             {/* Descrizione */}
                             <p className="mt-2 text-gray-800">{t.tipologia_spesa || "-"}</p>
+
+
 
                             {/* Prezzo */}
                             <p className="mt-5 font-bold text-neon-purple-hover text-xl">
@@ -224,6 +242,7 @@ export default function Transactions() {
                         importo: 0.01,
                         data_riferimento: new Date().toISOString(),
                         tipologia_spesa: "",
+                        tipo_transazione: "Uscita"
                     }
                 }
                 onSubmit={handleSubmit}

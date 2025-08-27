@@ -6,4 +6,5 @@ export interface Transazione {
     id_utente?: number;
     id_conto?: number;
     tipologia_spesa?: string;
+    tipo_transazione: "Entrata" | "Uscita"
 }

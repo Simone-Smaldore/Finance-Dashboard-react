@@ -25,6 +25,22 @@ const DateInput = styled(BaseInput)`
   }
 `;
 
+const ThemedSelect = styled.select`
+  width: 100%;
+  border: 1px solid;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: ${({ theme }) =>
+        theme.toggleColor};
+
+  &:focus {
+    outline: none;
+
+  }
+`;
+
+
+
 export default function TransactionForm({ values, setValues, setIsValid }: TransactionFormProps) {
 
 
@@ -35,7 +51,9 @@ export default function TransactionForm({ values, setValues, setIsValid }: Trans
         importo: false,
         data_riferimento: false,
         tipologia_spesa: false,
+        tipo_transazione: false,
     });
+
 
 
     const validate = useCallback((newValues: Transazione) => {
@@ -129,6 +147,19 @@ export default function TransactionForm({ values, setValues, setIsValid }: Trans
                 {touched.tipologia_spesa && errors.tipologia_spesa && (
                     <p className="text-red-500 text-xs">{errors.tipologia_spesa}</p>
                 )}
+            </div>
+
+            <div>
+                <label className="block text-sm mb-1">Tipo Transazione</label>
+                <ThemedSelect
+                    value={values.tipo_transazione}
+                    onChange={(e) => handleChange("tipo_transazione", e.target.value as "Entrata" | "Uscita")}
+                    onBlur={() => handleTouched("tipo_transazione")}
+                    className="w-full border p-2 rounded"
+                >
+                    <option value="Uscita">Uscita</option>
+                    <option value="Entrata">Entrata</option>
+                </ThemedSelect>
             </div>
         </>
     );
