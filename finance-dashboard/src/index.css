@@ -10,3 +10,20 @@
         transform: rotate(360deg);
     }
 }
+
+
+@theme {
+    --color-neon-blue: #0f62fe;
+    --color-neon-blue-hover: #0353e9;
+    --color-neon-pink: #ff79c6;
+    --color-neon-pink-hover: #e55bab;
+    --color-neon-purple: #7f5af0;
+    --color-neon-purple-hover: #6239e0;
+}
+
+
+@media (min-width: 480px) {
+    .xs\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

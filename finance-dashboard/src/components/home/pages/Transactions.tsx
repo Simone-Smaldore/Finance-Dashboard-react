@@ -120,16 +120,16 @@ export default function Transactions() {
     return (
         <div className="p-6">
             <button
-                className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 hover:cursor-pointer"
                 onClick={handleCreate}
             >
                 <FaPlus className="inline mr-2" />
                 Nuova Transazione
             </button>
 
-            <div className="overflow-x-auto shadow-lg rounded-lg">
-                <table className="min-w-full border border-gray-200 text-sm text-left">
-                    <thead className="bg-gray-100 text-gray-700">
+            <div className="overflow-x-auto shadow-lg rounded-xs">
+                <table className="hidden md:table min-w-full border text-sm text-left">
+                    <thead className="bg-neon-purple text-white">
                         <tr>
                             <th className="border px-3 py-2">Descrizione</th>
                             <th className="border px-3 py-2">Importo</th>
@@ -151,16 +151,10 @@ export default function Transactions() {
                                 <td className="border px-3 py-2">{t.tipologia_spesa || "-"}</td>
                                 <td className="border px-3 py-2">
                                     <div className="flex gap-2">
-                                        <button
-                                            className="px-3 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 hover:cursor-pointer"
-                                            onClick={() => handleEdit(t)}
-                                        >
+                                        <button className="px-3 py-3 bg-neon-blue text-white rounded hover:bg-neon-blue-hover hover:cursor-pointer" onClick={() => handleEdit(t)}>
                                             <FaPen />
                                         </button>
-                                        <button
-                                            className="px-3 py-3 bg-red-500 text-white rounded hover:bg-red-600 hover:cursor-pointer"
-                                            onClick={() => handleDelete(t.id!)}
-                                        >
+                                        <button className="px-3 py-3 bg-neon-pink text-white rounded hover:bg-neon-pink-hover hover:cursor-pointer" onClick={() => handleDelete(t.id!)}>
                                             <FaTrash />
                                         </button>
                                     </div>
@@ -169,6 +163,47 @@ export default function Transactions() {
                         ))}
                     </tbody>
                 </table>
+
+                {/* Versione mobile a card */}
+                <div className="md:hidden  grid grid-cols-1 xs:grid-cols-2 gap-2">
+                    {transazioni.map((t) => (
+                        <div
+                            key={t.id}
+                            className="border rounded-xl p-4 shadow bg-white flex flex-col justify-between"
+                        >
+                            {/* Tipologia */}
+                            <h3 className="font-bold text-black text-md text-center mb-5">
+                                {t.descrizione || "-"}
+                            </h3>
+
+                            {/* Data */}
+                            <p className="text-xs text-gray-500 mt-1">
+                                {t.data_riferimento
+                                    ? new Date(t.data_riferimento).toLocaleDateString()
+                                    : "-"}
+                            </p>
+
+                            {/* Descrizione */}
+                            <p className="mt-2 text-gray-800">{t.tipologia_spesa || "-"}</p>
+
+                            {/* Prezzo */}
+                            <p className="mt-5 font-bold text-neon-purple-hover text-xl">
+                                {t.importo.toFixed(2)} €
+                            </p>
+
+                            {/* Azioni */}
+                            <div className="flex justify-end gap-2 mt-4">
+                                <button className="px-3 py-2 bg-neon-blue text-white rounded-2xl hover:bg-neon-blue-hover shadow hover:cursor-pointer" onClick={() => handleEdit(t)}>
+                                    <FaPen />
+                                </button>
+                                <button className="px-3 py-2 bg-neon-pink text-white rounded-2xl hover:bg-neon-pink-hover shadow hover:cursor-pointer" onClick={() => handleDelete(t.id!)}>
+                                    <FaTrash />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
             </div>
 
             <ConfirmModal
